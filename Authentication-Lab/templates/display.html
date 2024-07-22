@@ -7,10 +7,14 @@
 </head>
 <body>
 	<h1>display </h1>
-	{%for i in session["quotes"]%}  
-		<h1>{{i}}</h1>
+	{%for i in quotes.values()%}
+		<h1>{{i['text']}}</h1>
+		<h1>{{i['saidby']}}</h1>
+
+
 	{%endfor%}
 	<a href="/thanks">go back</a>
+	
 	 
 </body>
 </html>

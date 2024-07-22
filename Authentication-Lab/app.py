@@ -11,18 +11,17 @@ Config = {
   'storageBucket': "auth-lab-2be2b.appspot.com",
   'messagingSenderId': "1089979688553",
   'appId': "1:1089979688553:web:a359b771e15614f5efe4f8",
-  "databaseURL": ""
+  "databaseURL": "https://database-lab-859f5-default-rtdb.europe-west1.firebasedatabase.app/"
 }
+
 
 
 firebase = pyrebase.initialize_app(Config)
 auth = firebase.auth()
+db = firebase.database()
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
 app.config['SECRET_KEY'] = 'super-secret-key'
-
-
-
 
 
 
@@ -32,14 +31,22 @@ def main():
   if request.method == "POST":
     email= request.form ["email"]
     passw = request.form["password"]
-
+    fulln= request.form["fullname"]
+    usern= request.form["username"]
+    user = { "em": email,"fullname" :fulln,"username":usern} 
+    
     try:
       session["quotes"]=[]
       session['user'] = auth.create_user_with_email_and_password(email, passw)
+      uid =session['user']['localId']
+
+      db.child("Users").child(uid).set(user)
+
       return render_template("home2.html")
     except:
 
       print("error try again")
+    session.modified=True
     return redirect(url_for('home'))
       
   else:
@@ -52,10 +59,15 @@ def main():
 @app.route('/home', methods=["GET","POST"])
 def home():
   if request.method == "POST":
-    quote=request.form['quote']
-    session["quotes"].append(quote)
-    session.modified =True
-    print(session)
+    quote_text =request.form["quote"]
+    saidwho = request.form["whosaid"]
+
+    uid =session['user']['localId']
+    quote={"text":quote_text,"saidby":saidwho,"uid":uid}
+
+    db.child("Quotes").push(quote)
+    session.modified=True
+    
     return redirect(url_for('thanks'))
   else:
     return render_template("home2.html")    
@@ -79,6 +91,7 @@ def signin():
     except:
 
       print("error try again")
+    session.modified=True
     return redirect(url_for('home'))
       
   else:
@@ -98,7 +111,10 @@ def signout():
 
 @app.route('/display')
 def display():
-  return render_template("display.html") 
+
+  quotes_data = db.child("Quotes").get().val()
+    
+  return render_template("display.html", quotes = quotes_data) 
 
 
 @app.route('/thanks')
