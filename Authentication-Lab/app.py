@@ -34,9 +34,8 @@ def main():
     passw = request.form["password"]
 
     try:
-      session['user'] = auth.create_user_with_email_and_password(email, passw)
       session["quotes"]=[]
-
+      session['user'] = auth.create_user_with_email_and_password(email, passw)
       return render_template("home2.html")
     except:
 
@@ -54,10 +53,15 @@ def main():
 def home():
   if request.method == "POST":
     quote=request.form['quote']
-    session["quotes"]=quote
+    session["quotes"].append(quote)
+    session.modified =True
+    print(session)
     return redirect(url_for('thanks'))
   else:
     return render_template("home2.html")    
+
+
+
 
 
 
@@ -69,8 +73,7 @@ def signin():
     passw = request.form["password"]
 
     try:
-      session['user'] = auth.create_user_with_email_and_password(email, passw)
-      session["quotes"]=[]
+      session['user'] = auth.sign_in_with_email_and_password(email, passw)
 
       return render_template("home2.html")
     except:
