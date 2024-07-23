@@ -97,8 +97,27 @@ def signout():
 
 @app.route('/booking',  methods=["GET","POST"])
 def booking():
+  if request.method=="GET":
+    return render_template('booking.html')
 
-  return render_template("booking.html") 
+
+  else:
+    date = request.form["daydate"]
+    try:
+      session['dates']=[]
+      session['dates'].append(date)
+      uid =session['user']['localId']
+
+      db.child('booked').child(uid).push(date)
+
+      return redirect(url_for('final'))
+
+    except:
+      print("error try again")
+      return render_template('booking.html')
+
+  
+  #return render_template("booking.html") 
 
 
 
