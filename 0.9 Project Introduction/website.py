@@ -11,7 +11,7 @@ Config = {
   'storageBucket': "auth-lab-2be2b.appspot.com",
   'messagingSenderId': "1089979688553",
   'appId': "1:1089979688553:web:a359b771e15614f5efe4f8",
-  "databaseURL": "https://database-lab-859f5-default-rtdb.europe-west1.firebasedatabase.app/"
+  "databaseURL": "https://my-website-eb2f8-default-rtdb.europe-west1.firebasedatabase.app/"
 }
 
 
@@ -36,13 +36,12 @@ def main():
     user = { "em": email,"fullname" :fulln,"username":usern} 
     
     try:
-      session["quotes"]=[]
       session['user'] = auth.create_user_with_email_and_password(email, passw)
       uid =session['user']['localId']
 
       db.child("Users").child(uid).set(user)
 
-      return render_template("home2.html")
+      return redirect(url_for('home'))
     except:
 
       print("error try again")
@@ -58,23 +57,12 @@ def main():
 
 @app.route('/home', methods=["GET","POST"])
 def home():
-  if request.method == "POST":
-    quote_text =request.form["quote"]
-    saidwho = request.form["whosaid"]
-
-    uid =session['user']['localId']
-    quote={"text":quote_text,"saidby":saidwho,"uid":uid}
-
-    db.child("Quotes").push(quote)
-    session.modified=True
-    
-    return redirect(url_for('thanks'))
+  if request.method=="GET":
+    return render_template("home2.html")
   else:
-    return render_template("home2.html")    
-
-
-
-
+    return redirect(url_for('booking'))
+  
+  
 
 
 
@@ -107,19 +95,18 @@ def signout():
     return redirect(url_for('main'))
 
 
+@app.route('/booking',  methods=["GET","POST"])
+def booking():
+
+  return render_template("booking.html") 
 
 
-@app.route('/display')
-def display():
-
-  quotes_data = db.child("Quotes").get().val()
-    
-  return render_template("display.html", quotes = quotes_data) 
 
 
-@app.route('/thanks')
-def thanks():
-  return render_template("thanks.html") 
+
+@app.route('/final')
+def final():
+  return render_template("final.html") 
 
 
 
