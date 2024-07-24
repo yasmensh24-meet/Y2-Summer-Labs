@@ -5,12 +5,13 @@ import pyrebase
 
 
 Config = {
-  'apiKey': "AIzaSyB-8eDx782PDnYe5Ov1FTC-VzqIhplVehI",
-  'authDomain': "auth-lab-2be2b.firebaseapp.com",
-  'projectId': "auth-lab-2be2b",
-  'storageBucket': "auth-lab-2be2b.appspot.com",
-  'messagingSenderId': "1089979688553",
-  'appId': "1:1089979688553:web:a359b771e15614f5efe4f8",
+  "apiKey": "AIzaSyB1k-tV3uvtTnqGF1lGDdyX1Jn8o8RBHcU",
+  "authDomain": "my-website-eb2f8.firebaseapp.com",
+  "databaseURL": "https://my-website-eb2f8-default-rtdb.europe-west1.firebasedatabase.app",
+  "projectId": "my-website-eb2f8",
+  "storageBucket": "my-website-eb2f8.appspot.com",
+  "messagingSenderId": "1084054906475",
+  "appId": "1:1084054906475:web:5a54c208318d4097c2332e",
   "databaseURL": "https://my-website-eb2f8-default-rtdb.europe-west1.firebasedatabase.app/"
 }
 
@@ -33,13 +34,17 @@ def main():
     passw = request.form["password"]
     fulln= request.form["fullname"]
     usern= request.form["username"]
-    user = { "em": email,"fullname" :fulln,"username":usern} 
+    user = { "em": email,"fullname" :fulln,"username":usern,"password":passw} 
+
     
     try:
       session['user'] = auth.create_user_with_email_and_password(email, passw)
       uid =session['user']['localId']
 
       db.child("Users").child(uid).set(user)
+      acc= db.child("Users").child(uid).get().val()
+      email = acc['em']
+      session['em'] = email
 
       return redirect(url_for('home'))
     except:
@@ -71,16 +76,20 @@ def signin():
   if request.method == "POST":
     email= request.form ["email"]
     passw = request.form["password"]
+    
+    
 
     try:
       session['user'] = auth.sign_in_with_email_and_password(email, passw)
+      if email == "yasmen@gmail.com":
+        return redirect(url_for("admin"))
 
       return render_template("home2.html")
     except:
 
       print("error try again")
-    session.modified=True
-    return redirect(url_for('home'))
+      session.modified=True
+      return redirect(url_for('home'))
       
   else:
     return render_template("signin.html")
@@ -106,9 +115,15 @@ def booking():
     try:
       session['dates']=[]
       session['dates'].append(date)
-      uid =session['user']['localId']
+      session.modified = True
 
-      db.child('booked').child(uid).push(date)
+      uid =session['user']['localId']
+      ref =db.child('Users').child(uid).get().val()
+      namee = ref['fullname']
+      session['fullname'] = namee
+      saved = {"date":date}
+      db.child('booked').child(uid).set(saved)
+      session['date_apt'] = date
 
       return redirect(url_for('final'))
 
@@ -120,7 +135,10 @@ def booking():
   #return render_template("booking.html") 
 
 
-
+@app.route('/admin')
+def admin():
+  ref =db.child('Users').get().val()
+  return render_template("admin.html", users = ref.items())
 
 
 @app.route('/final')

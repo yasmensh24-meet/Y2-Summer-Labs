@@ -4,14 +4,19 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title></title>
+	<link rel="stylesheet" type="text/css" href="../static/style.css">
 </head>
 <body>
-	<h1>thanks for submiting</h1>
-	<!-- <h2>your appointment is on {{session['date']}}</h2> -->
+	<h1>Thank you for booking {{session['fullname']}} !!</h1>
+	 <h2>your appointment is on </h2>
+	 <br>
+	 <h1>{{session['date_apt']}} </h1>
+	 <br>
+	 <h2>Dont be late .</h2>
 
 	
-
-	
-
+	 <a href="/booking">go back</a>
+	 <br>
+	  <a href="/">main</a>
 </body>
 </html>
