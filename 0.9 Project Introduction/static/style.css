@@ -10,9 +10,9 @@
 }
 
 
-
-
-
+body {
+  background-image: url("https://img.freepik.com/free-vector/abstract-background-with-squares_23-2148995948.jpg");
+}
 
 
 body, h1, h2, form {
@@ -36,21 +36,6 @@ h2 {
     margin-bottom: 30px;
 }
 
-
-a {
-    color: #007bff;
-    text-decoration: none;
-    display: inline-block;
-    margin-top: 10px;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-
-
-
 input[type="radio"] {
     display: block;
     margin: 10px auto;
@@ -66,15 +51,6 @@ form {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-input[type="date"],
-input[type="submit"] {
-    width: calc(100% - 20px);
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
 }
 
 
@@ -116,12 +92,10 @@ a:hover {
 
 
 
-
-
-
-
-
-
-
+img {
+    text-align: center;
+    margin-top: 20px;
+    
+}
 
 

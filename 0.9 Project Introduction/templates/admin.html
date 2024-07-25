@@ -8,13 +8,15 @@
 </head>
 <body>
 	<h1>admin page </h1>
-	<br> </br>
+	
 	<h2>people who signed up</h2>
 	{% for key, user in users %}
-		{{user['em']}}
+		<li>{{user['em']}}</li>
 		<br>
 	{% endfor %}
-	<h1><h1>
+	
+	<img src="../static/dogpaw.jpg"  width="150" height="150" align= "right">
+
 	
 </body>
 </html>

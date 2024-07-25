@@ -35,6 +35,8 @@ def main():
     fulln= request.form["fullname"]
     usern= request.form["username"]
     user = { "em": email,"fullname" :fulln,"username":usern,"password":passw} 
+    if email == ""  and passw == "":
+      return render_template('error.html')
 
     
     try:
@@ -76,7 +78,8 @@ def signin():
   if request.method == "POST":
     email= request.form ["email"]
     passw = request.form["password"]
-    
+
+
     
 
     try:
@@ -118,11 +121,17 @@ def booking():
       session.modified = True
 
       uid =session['user']['localId']
-      ref =db.child('Users').child(uid).get().val()
+      print('uid')
+      ref = db.child("Users").child(uid).get().val()
+      print('reference')
+      
+
       namee = ref['fullname']
+
       session['fullname'] = namee
       saved = {"date":date}
       db.child('booked').child(uid).set(saved)
+      print('booking')
       session['date_apt'] = date
 
       return redirect(url_for('final'))

@@ -5,6 +5,11 @@ body, html {
 
 
 body {
+  background-image: url("https://img.freepik.com/free-vector/abstract-background-with-squares_23-2148995948.jpg");
+}
+
+
+body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
     background-color: #f0f0f0; /* Light gray background */
@@ -40,3 +45,20 @@ ul li {
         font-size: 14px; /* Adjust font size for smaller screens */
     }
 }
+
+
+img {
+    text-align: center;
+    margin-top: 20px;
+    
+}
+
+
+
+
+
+
+
+
+
+
